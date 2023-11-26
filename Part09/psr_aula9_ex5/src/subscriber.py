@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 import argparse
+
+from psr_aula9_ex5.msg import Dog
 import rospy
 from std_msgs.msg import String
-from colorama import Fore,Style
 
 def callback(message_received):
-    print_color = rospy.get_param("/highlight_text_color","MAGENTA")
-    rospy.loginfo(getattr(Fore, print_color) + message_received.data + Style.RESET_ALL)
+
+    print('Received Dog message with name ' + message_received.name + ' color ' + message_received.color +
+     ' age ' + str(message_received.age) + ' brothers ' + str(message_received.brothers))
 
 def main():
 
@@ -14,12 +16,9 @@ def main():
     # Initialization
     # -------------------------------------------
 
-    # Setup of argparse
     # Setup ROS
-    rospy.init_node('subscriber', anonymous=True)    
-
-    rospy.Subscriber("topic_name", String, callback)
-
+    rospy.init_node('subscriber', anonymous=True)
+    rospy.Subscriber("topic", Dog, callback)
 
     # -------------------------------------------
     # Execution

@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-import argparse
 import rospy
 from std_msgs.msg import String
 from colorama import Fore,Back,Style
@@ -15,13 +14,20 @@ def main():
 
     rospy.init_node('publisher', anonymous=True)
 
-    print_color = rospy.get_param("/highlight_text_color","MAGENTA")
-
-    rate = rospy.Rate(10)
+    frequency= rospy.get_param("/publisher/frequency",1.0)
+    rate = rospy.Rate(frequency)
     while not rospy.is_shutdown():
         message_to_send = "some content"
-
-        rospy.loginfo(Fore.RED + message_to_send+ Style.RESET_ALL)
+        
+        
+        print_color = rospy.get_param("/highlight_text_color","MAGENTA")
+        
+        rospy.loginfo(getattr(Fore, print_color) + message_to_send+ Style.RESET_ALL)
+        
+        rospy.logwarn("I think something is up")
+        
+        rospy.logerr("Something went wrong")
+        
         pub.publish(message_to_send)
         rate.sleep()
 
